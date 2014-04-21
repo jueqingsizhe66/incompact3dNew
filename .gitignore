@@ -1,0 +1,10 @@
+*.mod   # ignore all the *.mod files
+*.o     # ignore all the *.o files
+*.out   # ignore all the *.out files
+*.tar.gz  #  ignore all the 
+!lib.mod  #  But don't ignore the file lib.mod
+*.swp
+airfoil/
+mostupdate/
+sauve.dat
+*.dat
