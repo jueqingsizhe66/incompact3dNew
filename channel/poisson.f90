@@ -1,3 +1,4 @@
+
 !################################################################################
 !This file is part of Incompact3d.
 !
@@ -43,6 +44,7 @@ module decomp_2d_poisson
   private        ! Make everything private unless declared public
 
 !  real(mytype), private, parameter :: PI = 3.14159265358979323846_mytype
+!                                   This 0.0_mytype!!!!!!!!!!!!!1111
 
 #ifdef DOUBLE_PREC
   real(mytype), parameter :: epsilon = 1.e-16
@@ -91,6 +93,9 @@ contains
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   ! Initialise Poisson solver for given boundary conditions
+  !                               given
+  !                               given
+  !   just for init
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   subroutine decomp_2d_poisson_init(bcx1, bcy1, bcz1)
 
@@ -116,6 +121,12 @@ contains
     allocate(ay(ny),by(ny))
     allocate(az(nz),bz(nz))
     call abxyz(ax,ay,az,bx,by,bz,nx,ny,nz,bcx,bcy,bcz)
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Initialise the ax bx
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Initialise the ay by
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Initialise the az bz
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+
 
     call decomp_info_init(nx, ny, nz, ph)
     call decomp_info_init(nx, ny, nz/2+1, sp)
@@ -129,6 +140,7 @@ contains
        allocate(a(sp%yst(1):sp%yen(1),ny/2,sp%yst(3):sp%yen(3),5))
        allocate(a2(sp%yst(1):sp%yen(1),ny/2,sp%yst(3):sp%yen(3),5))
        allocate(a3(sp%yst(1):sp%yen(1),ny,sp%yst(3):sp%yen(3),5))
+       ! (000)  ^c  ^kxyz ^a
     else if (bcx==1 .and. bcy==0 .and. bcz==0) then
        allocate(cw1(sp%xst(1):sp%xen(1),sp%xst(2):sp%xen(2), &
                  sp%xst(3):sp%xen(3)))
@@ -145,6 +157,7 @@ contains
        allocate(a(sp%yst(1):sp%yen(1),ny/2,sp%yst(3):sp%yen(3),5))
        allocate(a2(sp%yst(1):sp%yen(1),ny/2,sp%yst(3):sp%yen(3),5))
        allocate(a3(sp%yst(1):sp%yen(1),ny,sp%yst(3):sp%yen(3),5))
+       !(100)      consist :: cw1 cw1b   rw1   rw1b   rw2    ^a
     else if (bcx==0 .and. bcy==1 .and. bcz==0) then
        allocate(rw2(ph%yst(1):ph%yen(1),ph%yst(2):ph%yen(2), &
             ph%yst(3):ph%yen(3)))
@@ -165,6 +178,7 @@ contains
        allocate(a(sp%yst(1):sp%yen(1),ny/2,sp%yst(3):sp%yen(3),5))
        allocate(a2(sp%yst(1):sp%yen(1),ny/2,sp%yst(3):sp%yen(3),5))
        allocate(a3(sp%yst(1):sp%yen(1),ny,sp%yst(3):sp%yen(3),5))
+       !(010)  rw2 rw2b cw2 cw22 cw2b cw2c kxyz  ^a
     else if (bcx==1 .and. bcy==1) then
        allocate(cw1(sp%xst(1):sp%xen(1),sp%xst(2):sp%xen(2), &
                  sp%xst(3):sp%xen(3)))
@@ -186,6 +200,7 @@ contains
             ph%yst(3):ph%yen(3)))
        allocate(rw2b(ph%yst(1):ph%yen(1),ph%yst(2):ph%yen(2), &
             ph%yst(3):ph%yen(3)))
+        !(11*) cw1 cw1b cw2 cw2b  cw2c  rw1 rw1b rw2b
        if (bcz==1) then  
           allocate(rw3(ph%zsz(1),ph%zsz(2),ph%zsz(3)))
        end if
@@ -194,6 +209,7 @@ contains
        allocate(a(sp%yst(1):sp%yen(1),ny/2,sp%yst(3):sp%yen(3),5))
        allocate(a2(sp%yst(1):sp%yen(1),ny/2,sp%yst(3):sp%yen(3),5))
        allocate(a3(sp%yst(1):sp%yen(1),nym,sp%yst(3):sp%yen(3),5))      
+       !(111) rw3  kxyz  ^a
     end if 
 
     call waves()
@@ -221,14 +237,19 @@ contains
 
     if (bcx==0 .and. bcy==0 .and. bcz==0) then
        deallocate(cw1)
+       ! (000) cw1
     else if (bcx==1 .and. bcy==0 .and. bcz==0) then
        deallocate(cw1,cw1b,rw1,rw1b,rw2)
+       ! (100)   cw1 cw1b rw1 rw1b rw2
     else if (bcx==0 .and. bcy==1 .and. bcz==0) then
        deallocate(cw1,cw2,cw2b,rw2,rw2b)
+       ! (010)   cw1 cw2  cw2b  rw2 rw2b
     else if (bcx==1 .and. bcy==1) then
        deallocate(cw1,cw1b,cw2,cw2b,rw1,rw1b,rw2,rw2b)
+       ! (11*)   cw1,cw1b,cw2,cw2b,rw1,rw1b,rw2,rw2b
        if (bcz==1) then
           deallocate(rw3)
+        !(111)    rw3
        end if
     end if
 
@@ -265,6 +286,8 @@ contains
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   ! Solving 3D Poisson equation with periodic B.C in all 3 dimensions
+  !                                                      3
+  !                                                      3
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   subroutine poisson_000(rhs)
 
@@ -297,10 +320,17 @@ contains
        fft_initialised = .true.
     end if
 
-    ! compute r2c transform 
+    ! compute r2c transform   r2c:real to complex by zhaoliang
+    ! cw1 is 3dim data structrue
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!! only fft to transform the real data to complex data while (100) twice
+    !!!!! one is tranform and then fft  (you can see poisson100
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     call decomp_2d_fft_3d(rhs,cw1)
+    
 
     ! normalisation
+    !  why this below is called normalisation ??????  just divide 3dim grid number
     cw1 = cw1 / real(nx, kind=mytype) /real(ny, kind=mytype) &
          / real(nz, kind=mytype)
 
@@ -310,18 +340,29 @@ contains
 
              ! post-processing in spectral space
 
+             !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+             !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+             !!!!!!!!!!!!!!!!!post-processing in 3-direction can be
+             !!!!!!!!!!!!!!!!! set in the same cycle,because they are
+             !!!!!!!!!!!!!!!!!! similar
+             !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+             !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
              ! POST PROCESSING IN Z
-             tmp1 = real(cw1(i,j,k), kind=mytype)
-             tmp2 = aimag(cw1(i,j,k))
+             tmp1 = real(cw1(i,j,k), kind=mytype)   !  get the real number of cw1
+             tmp2 = aimag(cw1(i,j,k))               !  get the imagenumber of cw1
              cw1(i,j,k) = cmplx(tmp1*bz(k)+tmp2*az(k), &
-                  tmp2*bz(k)-tmp1*az(k), kind=mytype)
+                  tmp2*bz(k)-tmp1*az(k), kind=mytype)   ! modify the cw1 in the spectral space Z
+                                                    !  bz  az
+                                                    !  by  ay
+                                                    !  bx  ax
 
              ! POST PROCESSING IN Y
              tmp1 = real(cw1(i,j,k), kind=mytype)
              tmp2 = aimag(cw1(i,j,k))
              cw1(i,j,k) = cmplx(tmp1*by(j)+tmp2*ay(j), &
                   tmp2*by(j)-tmp1*ay(j), kind=mytype)
-             if (j.gt.(ny/2+1)) cw1(i,j,k)=-cw1(i,j,k)
+             if (j.gt.(ny/2+1)) cw1(i,j,k)=-cw1(i,j,k)   ! why should be axisymmetry!
 
              ! POST PROCESSING IN X
              tmp1 = real(cw1(i,j,k), kind=mytype)
@@ -330,11 +371,17 @@ contains
                   tmp2*bx(i)-tmp1*ax(i), kind=mytype)
              if (i.gt.(nx/2+1)) cw1(i,j,k)=-cw1(i,j,k)
 
-             ! Solve Poisson
+             !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+             !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+             !!!!!!!!!!!!!!! Solve Poisson
+             !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+             !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
              tmp1=real(kxyz(i,j,k), kind=mytype)
              tmp2=aimag(kxyz(i,j,k))
              ! CANNOT DO A DIVISION BY ZERO
-             if ((tmp1.lt.epsilon).or.(tmp2.lt.epsilon)) then
+             !  Yes ! division  by zero is impossible!!!-----------------------------------<
+             if ((tmp1.lt.epsilon).or.(tmp2.lt.epsilon)) then   !epsilon?  what does it mean?
                 cw1(i,j,k)=0._mytype
 !                print *,'DIV 0',i,j,k,epsilon
              else
@@ -347,13 +394,21 @@ contains
       !        write(*,*) 'AFTER',i,j,k,out(i,j,k),xyzk
       !     end if
 
+
+             !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+             !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
              ! post-processing backward
+             !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+             !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
              
              ! POST PROCESSING IN Z
              tmp1 = real(cw1(i,j,k), kind=mytype)
              tmp2 = aimag(cw1(i,j,k))
              cw1(i,j,k) = cmplx(tmp1*bz(k)-tmp2*az(k), &
                   -tmp2*bz(k)-tmp1*az(k), kind=mytype)
+              !                                          bz    az
+              !                                          by    ay
+              !                                          bx    ax
 
              ! POST PROCESSING IN Y
              tmp1 = real(cw1(i,j,k), kind=mytype)
@@ -374,7 +429,7 @@ contains
     end do
              
     ! compute c2r transform
-    call decomp_2d_fft_3d(cw1,rhs)
+    call decomp_2d_fft_3d(cw1,rhs)    !  from complex  to real!
     
  !   call decomp_2d_fft_finalize
 
@@ -383,6 +438,10 @@ contains
 
 
   subroutine poisson_100(rhs)
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!!! get the rhs and then modify rhs ,at last return the rhs
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
     implicit none
 
@@ -393,6 +452,35 @@ contains
     real(mytype) :: xx1,xx2,xx3,xx4,xx5,xx6,xx7,xx8
     
     integer :: nx,ny,nz, i,j,k, itmp
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!  8 transform   from x -->y -->z then z--> y --->x at the beginning
+    !!!!!!!!!!!!!!!!!!from x -->y -->z then z--> y --->x at the endding
+    !!!!!  (100 add 8 more transform than 000) while 000 is 0 transform
+    !!!!!  so rhs is in the z pencil ,no there are not z pencil at all!
+    !!!!!   the program is  2-dim pm*pn decomp !  so only  xpencil and y pencil
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+                   !!!!!!!!!!!!!!twice real to complex
+                     !!!!!!!!!!! 1: transform rhs-rw2-rw1
+                     !!!!!!!!!!! 2: fft       rhs-----rw1
+                   !!!!!!!!!!!!!!twice complex to real
+                     !!!!!!!!!!! 1: transfrom rw1-rw2--rhs
+                     !!!!!!!!!!! 2: fft       rw1------rhs
+                   !!!!!!!!!!!!! post-processing operations is under the complex condition
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!   input real rhs(:.:,:) in the z pencil
+    !!!!!!!!!!!!   2+2 transform    |destination: modify the rhs
+    !!!!!!!!!!!!   1 normalisation 
+    !!!!!!!!!!!!   1 FFT forward
+    !!!!!!!!!!!!   3 post-processing   z-->y--->x  direction not pencil
+    !!!!!!!!!!!!   1 poisson solver
+    !!!!!!!!!!!!   3 post-processing backward  x--->y---->z  direction
+    !!!!!!!!!!!!   1 FFT backward 
+    !!!!!!!!!!!!   2+2 transform    |destination: modify the rhs
+    !!!!!!!!!!!!   output real rhs(:,:,:)  in the z pencil
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 100 format(1x,a8,3I4,2F12.6)
 
@@ -400,30 +488,63 @@ contains
     ny = ny_global
     nz = nz_global
 
-    ! rhs is in Z-pencil but requires global operations in X
-    call transpose_z_to_y(rhs,rw2,ph)
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+    ! rhs is in Z-pencil(wrong!There isn't Z pencil)(wrong
+      !again, there is Z pencil))but requires global operations in X
+    ! why should do the transpose!!!!!!!!!!!!!!
+       ! why in the poisson_000 is not needed!???????????????
+    !   two steps to change from z to x
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+
+    call transpose_z_to_y(rhs,rw2,ph)  ! z pencil in y pencil but in the physical space
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!rw2 is the complex 3-dim data the same as rw1
     call transpose_y_to_x(rw2,rw1,ph)
     do k=ph%xst(3),ph%xen(3)
        do j=ph%xst(2),ph%xen(2)
           do i=1,nx/2
-             rw1b(i,j,k)=rw1(2*(i-1)+1,j,k)
+              !!! rw1  rw1b   1 means  x pencil   
+              !!! rw2  rw2b   2 means  y pencil
+             rw1b(i,j,k)=rw1(2*(i-1)+1,j,k)  ! the odd terms  is for the half before
           enddo
           do i=nx/2+1,nx
-             rw1b(i,j,k)=rw1(2*nx-2*i+2,j,k)
+             rw1b(i,j,k)=rw1(2*nx-2*i+2,j,k)  ! the reverse terms is for the half after
           enddo
        enddo
     end do
 
-    call transpose_x_to_y(rw1b,rw2,ph)
-    call transpose_y_to_z(rw2,rhs,ph)
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+    !!!!3 layers data
+    !!!! rw1b is the top lay data  xpencil     physical space
+    !!!! rw2  is in the middle lay data   y pencil   physical space
+    !!!! rw1 rhs  is in the outer lay data    z pencil  spectral space
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+
+    call transpose_x_to_y(rw1b,rw2,ph)    ! let x pencil rw1b to y pencil
+    call transpose_y_to_z(rw2,rhs,ph)     ! let y pencil rw2 to  z pencil's rhs
+    !!!!!!!!!!!!first time get what we want
 
     if (.not. fft_initialised) then
        call decomp_2d_fft_init(PHYSICAL_IN_Z,nx,ny,nz)
        fft_initialised = .true.
     end if
 
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     ! compute r2c transform 
-    call decomp_2d_fft_3d(rhs,cw1)
+    !           why should force the before pre-posting   ------------------------------<<<<
+    !!!!!!!!!the most key operation :::: the fft operator: decomp_2d_fft_3d
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    call decomp_2d_fft_3d(rhs,cw1)  !  from real to complex!  and begin poission solver
+
+    
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! in the z pencil we did the fft transform
+        !!!!!!!!!!!!!!!!!! so cw1 is 3d complex data ,yeah (:,:,:)
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
 
     ! normalisation
     cw1 = cw1 / real(nx, kind=mytype) /real(ny, kind=mytype) &
@@ -475,6 +596,9 @@ contains
        end do
     end do
 
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!because (100)
+                   !!!!!!!!!!!!!!!!!!!!!so the post processing in x is different 
+                   !!!!!!!!!!!!!!!!!!!!!from the  y and z
     ! POST PROCESSING IN X
     do k = sp%xst(3),sp%xen(3)
        do j = sp%xst(2),sp%xen(2)
@@ -482,8 +606,8 @@ contains
           do i = 2,nx
              tmp1 = real(cw1(i,j,k), kind=mytype)
              tmp2 = aimag(cw1(i,j,k))
-             tmp3 = real(cw1(nx-i+2,j,k), kind=mytype)
-             tmp4 = aimag(cw1(nx-i+2,j,k))
+             tmp3 = real(cw1(nx-i+2,j,k), kind=mytype) !!! the 2~nx
+             tmp4 = aimag(cw1(nx-i+2,j,k))    !!!!!!!!!!!!     2~nx
              xx1=tmp1*bx(i)/2._mytype
              xx2=tmp1*ax(i)/2._mytype
              xx3=tmp2*bx(i)/2._mytype
@@ -497,6 +621,10 @@ contains
           end do
        end do
     end do
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !  While  you set the -Debug in the compile period
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 #ifdef DEBUG
     do k = sp%xst(3),sp%xen(3)
        do j = sp%xst(2),sp%xen(2)
@@ -508,6 +636,9 @@ contains
        end do
     end do
 #endif
+!!!!!!!!!!!!!!!!!!!!!from now on, the cw1b in x,y,z direction(not pencil)
+!!!!!!!!!!!!!!!!!!!!is calculated ,so now you can calculate cw1b in the 
+!!!!!!!!!!!!!!!!!!!!!!! poisson condition ,yes poisson solver
 
     ! Solve Poisson
     do k = sp%xst(3),sp%xen(3)
@@ -519,6 +650,7 @@ contains
              tmp2=aimag(kxyz(i,j,k))
              !xyzk=cmplx(tmp1,tmp2, kind=mytype)
              ! CANNOT DO A DIVISION BY ZERO
+! yes
              if ((abs(tmp1).lt.epsilon).and.(abs(tmp2).lt.epsilon)) then    
                 cw1b(i,j,k)=cmplx(0._mytype,0._mytype, kind=mytype)
              end if
@@ -530,6 +662,9 @@ contains
                 cw1b(i,j,k)=cmplx( real(cw1b(i,j,k), kind=mytype) &
                      /(-tmp1), 0._mytype, kind=mytype)
              end if
+             !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+             !!!!!!!!!!!!!!!!!!the most dayly processing
+             !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
              if ((abs(tmp1).ge.epsilon).and.(abs(tmp2).ge.epsilon)) then
                 cw1b(i,j,k)=cmplx( real(cw1b(i,j,k), kind=mytype) &
                      /(-tmp1), &
@@ -545,6 +680,13 @@ contains
     
     ! post-processing backward
 
+!!!!!!!!!!!!!!!!!!!!!!  You know cw1b is the cw1's another form in the spectral
+!!!!!!!!!!!!!!!!!!!!!! space ,so you need to change the spetral space to physical
+!!!!!!!!!!!!!!!!!!!!!!! space again ,yes get the cw1
+!!!!!!!!!!!!!!!!!!!!!!!! from now on ,you will found that the calculate of poisson
+!!!!!!!!!!!!!!!!!!!!!!!! equation is in the spectral space ,from the fft,then 3 post 
+!!!!!!!!!!!!!!!!!!!!!!!!!! processing in x,y,z 3 directions, then calculate the  poisson
+!!!!!!!!!!!!!!!!!!!!!!!!!! equation. OK,then you start next!
     ! POST PROCESSING IN X
     do k = sp%xst(3),sp%xen(3)
        do j = sp%xst(2),sp%xen(2)
@@ -564,9 +706,12 @@ contains
              xx8=tmp4*ax(i)
              cw1(i,j,k) = cmplx(xx1-xx4+xx6+xx7,-(-xx2-xx3+xx5-xx8), &
                   kind=mytype)        
+              !!!!!the buterfly algorithm!!!!!!!!!!!!!!!!!!!!!!!
           end do
        end do
     end do
+    !!!!!!!!!!!!!!!!!!!!!!!from now on x direction ,the spectral data has been transform to
+    !!!!!!!!!!!!!!!!!!!!!!!! physical space, but still the complex
 #ifdef DEBUG
     do k = sp%xst(3),sp%xen(3)
        do j = sp%xst(2),sp%xen(2)
@@ -596,6 +741,8 @@ contains
        end do
     end do
 
+                                    !!!!!!!!!!!!!!!!!!!!!! by  ay
+                                    !!!!!!!!!!!!!!!!!!!!!! bz  az
     ! POST PROCESSING IN Z
     do k = sp%xst(3),sp%xen(3)
        do j = sp%xst(2),sp%xen(2)
@@ -621,21 +768,25 @@ contains
     do k=ph%xst(3),ph%xen(3)
        do j=ph%xst(2),ph%xen(2)
           do i=1,nx/2
-             rw1b(2*i-1,j,k)=rw1(i,j,k)
+             rw1b(2*i-1,j,k)=rw1(i,j,k)   ! the odd terms is setted!
           enddo
           do i=1,nx/2
-             rw1b(2*i,j,k)=rw1(nx-i+1,j,k)
+             rw1b(2*i,j,k)=rw1(nx-i+1,j,k)  ! the even terms is setted
           enddo
        enddo
     end do
     call transpose_x_to_y(rw1b,rw2,ph)
     call transpose_y_to_z(rw2,rhs,ph)
+!!!!!!!!!!!!!the finally outcome rhs
     
   !  call decomp_2d_fft_finalize
 
     return
   end subroutine poisson_100
 
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Neumann!!!!!!!!!!!!!!!!!!!!!!!!!!!111
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   ! Solving 3D Poisson equation: Neumann in Y; periodic in X & Z
@@ -655,10 +806,44 @@ contains
 100 format(1x,a8,3I4,2F12.6)
 
     nx = nx_global
-    ny = ny_global - 1
+    ny = ny_global - 1  ! (010)  so have fewer1 ny!
     nz = nz_global
 
-    ! rhs is in Z-pencil but requires global operations in Y
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!so if (11*)  you need to ?what pencil??????
+    !!!!??
+    ! rhs is in Z-pencil but requires global operations in Y  because(010)
+
+                   !!!!!!!!!!!!!!twice real to complex
+                     !!!!!!!!!!! 1: transform rhs-rw2-rw1
+                     !!!!!!!!!!! 2: fft       rhs-----rw1
+                   !!!!!!!!!!!!!!twice complex to real
+                     !!!!!!!!!!! 1: transfrom rw1-rw2--rhs
+                     !!!!!!!!!!! 2: fft       rw1------rhs
+                   !!!!!!!!!!!!! post-processing operations is under the complex condition
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!   input real rhs(:.:,:) in the z pencil
+    !!!!!!!!!!!!   1+1 transform  z->y y->z  |destination: modify the rhs  because z-y=1  rather than z-x=2
+    !!!!!!!!!!!!   1 normalisation 
+    !!!!!!!!!!!!   1 FFT forward
+    !!!!!!!!!!!!   2 post-processing   z-->x  direction not pencil
+    !!!!!!!!!!!!   1 transform z-y 
+    !!!!!!!!!!!!   1 post-processing   y
+    !!!!!!!!!!!!   1 poisson solver
+    !!!!!!!!!!!!   1 matrice_refinement
+    !!!!!!!!!!!!   3 inversion5_v1  inversion5_v2
+    !!!!!!!!!!!!   1 post-processing backward  Y
+    !!!!!!!!!!!!   1 transform y-z 
+    !!!!!!!!!!!!   2 post-processing backward  x---->z  direction
+    !!!!!!!!!!!!   1 FFT backward 
+    !!!!!!!!!!!!   1+1 transform    |destination: modify the rhs
+    !!!!!!!!!!!!   output real rhs(:,:,:)  in the z pencil
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                   !!!!!!!!!!!!!!!!!!so the key factor  a  a2  a3    ax bx
+                   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ay by
+                   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! az bz
+
     call transpose_z_to_y(rhs,rw2,ph)
     do k=ph%yst(3),ph%yen(3)
        do i=ph%yst(1),ph%yen(1)
@@ -677,7 +862,9 @@ contains
        fft_initialised = .true.
     end if
     ! compute r2c transform 
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     call decomp_2d_fft_3d(rhs,cw1)
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     ! normalisation
     cw1 = cw1 / real(nx, kind=mytype) /real(ny, kind=mytype) &
@@ -731,8 +918,10 @@ contains
     
     ! POST PROCESSING IN Y
     ! NEED TO BE IN Y PENCILS!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!sp!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     call transpose_x_to_y(cw1,cw2,sp)
 
+    !!!!!!!!!!!!!!!!!!!!!sp!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     do k = sp%yst(3), sp%yen(3)
        do i = sp%yst(1), sp%yen(1)
           cw2b(i,1,k)=cw2(i,1,k)
@@ -802,7 +991,9 @@ contains
 
     else
        
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
        call matrice_refinement()
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !       do k = sp%yst(3), sp%yen(3)
 !          do j = 1,ny/2
 !             do i = sp%yst(1), sp%yen(1)
@@ -814,6 +1005,10 @@ contains
 !       enddo
      
 
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!istret  !=3
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
        if (istret.ne.3) then
           cw2(:,:,:)=0.;cw2c(:,:,:)=0.
           do k = sp%yst(3), sp%yen(3)
@@ -835,6 +1030,7 @@ contains
   !     end do
   !  end do
           
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!for the strech  grid!!!!!!!!!!!!!!!!!!!!!!!
          call inversion5_v1(a,cw2,sp)
          call inversion5_v1(a2,cw2c,sp)
 
@@ -988,6 +1184,7 @@ contains
     end do
 
     ! compute c2r transform, back to physical space
+
     call decomp_2d_fft_3d(cw1,rhs)
 
     ! rhs is in Z-pencil but requires global operations in Y
@@ -1009,11 +1206,61 @@ contains
     return
   end subroutine poisson_010
 
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!!!!!!!!!!!!!!!!!!!!!!!!Neumann!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!11x!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!!!!!!!!!!!!Neumann Neumann Neumann!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!!!!!!!!!!!!Neumann Neumann periodic!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   ! Solving 3D Poisson equation: Neumann in X, Y; Neumann/periodic in Z
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   subroutine poisson_11x(rhs, nclz1)
+
+
+
+
+                   !!!!!!!!!!!!!!twice real to complex
+                     !!!!!!!!!!! 1: transform rhs-rw2-rw1
+                     !!!!!!!!!!! 2: fft       rhs-----rw1
+                   !!!!!!!!!!!!!!twice complex to real
+                     !!!!!!!!!!! 1: transfrom rw1-rw2--rhs
+                     !!!!!!!!!!! 2: fft       rw1------rhs
+                   !!!!!!!!!!!!! post-processing operations is under the complex condition
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!   input real rhs(:.:,:) in the z pencil
+    !!!!!!!!!!!!   2+2 transform    z--y  y->x   x-y y-z|destination: modify the rhs
+    !!!!!!!!!!!!   1 normalisation 
+    !!!!!!!!!!!!   1 FFT forward
+    !!!!!!!!!!!!   1 post-processing  z
+    !!!!!!!!!!!!   1 transpose  x--y
+    !!!!!!!!!!!!   1 post-processing  y
+    !!!!!!!!!!!!   1 transpose  y--x
+    !!!!!!!!!!!!   1 post-processing  x (because  he thinks he is in X pencil, Zhaoliang said no)
+    !!!!!!!!!!!!   1 poisson solver
+    !!!!!!!!!!!!   1 matrice_refinemento
+    !!!!!!!!!!!!   1 transpse   x--y  (for strecting  because strecthing is in the y direction)
+    !!!!!!!!!!!!   1 inversion5_v1 
+    !!!!!!!!!!!!   1 transpose  y---x
+    !!!!!!!!!!!!  
+    !!!!!!!!!!!!   1 post-processing x
+    !!!!!!!!!!!!   1 transpose  x-y
+    !!!!!!!!!!!!   1 post-processing y
+    !!!!!!!!!!!!   1 transpose  y-x
+    !!!!!!!!!!!!   1 post-processing z
+    !!!!!!!!!!!!!
+    !!!!!!!!!!!!   1 FFT backward 
+    !!!!!!!!!!!!   2+2 transform    |destination: modify the rhs
+    !!!!!!!!!!!!   output real rhs(:,:,:)  in the z pencil
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
 
     implicit none
 
@@ -1028,10 +1275,10 @@ contains
 
 100 format(1x,a8,3I4,2F12.6)
 
-    nx = nx_global - 1
+    nx = nx_global - 1   ! becasuse (110)
     ny = ny_global - 1
 
-    if (nclz1==1) then	
+    if (nclz1==1) then	 !!!!!the free-slip boundary condition
        nz = nz_global - 1
     else if (nclz1==0) then
        nz = nz_global
@@ -1127,8 +1374,34 @@ contains
        end do
     end do
 
+
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!while  1  should be in the corresponding pencils
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!characteristic 2 : there sholud be tmp1*2*3*4
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     ! POST PROCESSING IN Y
     ! WE HAVE TO BE IN Y PENCILS
+
+
+
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!No  we should be the z pencil!  
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    !!!!!!!!!!!!!!!!!!!there is something wrong in the source code!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!But now we are in the z pencil not in
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  the x pencil!
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!so,it should be
+    !!!!!!!!!!!!!!!!!call transpose_z_to_y rather than transpose_x_to_y
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     call transpose_x_to_y(cw1,cw2,sp)
     do k = sp%yst(3), sp%yen(3)
        do i = sp%yst(1), sp%yen(1)
@@ -1153,6 +1426,8 @@ contains
     end do
     
     ! back to X-pencil
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!the same wrong ,now you should 
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!go back to the z pencil rather than the x pencil
     call transpose_y_to_x(cw2b,cw1,sp)
 #ifdef DEBUG
     do k = sp%xst(3),sp%xen(3)
@@ -1235,7 +1510,10 @@ contains
 
     else
        call matrice_refinement()
+       !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11so       we  should  z->y pencil but not  x->ypencil
 ! the stretching is only working in Y pencils
+
+!!!!!!!!!!!!!!!why the default the pencil is  x pencil rather than z pencil!!!
        call transpose_x_to_y(cw1b,cw2b,sp)
        !we are now in Y pencil
        
@@ -1458,11 +1736,17 @@ contains
 
     if (bcx==0) then
        do i=1,nx
+           !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+           !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+           !!!!!!!!!!!!!! generate the x direction coeficiency!!!!!!!!!!!
+           !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+           !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           ax(i) = sin(real(i-1, kind=mytype)*PI/real(nx, kind=mytype))
           bx(i) = cos(real(i-1, kind=mytype)*PI/real(nx, kind=mytype))
        end do
     else if (bcx==1) then
        do i=1,nx
+           !!!!!!!!!!!!!!!!!!!!!!!!!one and a half of PI
           ax(i) = sin(real(i-1, kind=mytype)*PI/2.0_mytype/ &
                real(nx, kind=mytype))
           bx(i) = cos(real(i-1, kind=mytype)*PI/2.0_mytype/ &
@@ -1527,7 +1811,11 @@ complex(mytype) :: tmp4,tmp5,tmp6
 xkx(:)=0. ; xk2(:)=0. ; yky(:)=0. ; yk2(:)=0.
 zkz(:)=0. ; zk2(:)=0.
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !WAVE NUMBER IN X
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 if (nclx==0) then
    do i=1,nx/2+1
       w=2.*pi*(i-1)/nx
@@ -2162,7 +2450,6 @@ endif
 
 
    
-
 
 return
 end subroutine matrice_refinement
