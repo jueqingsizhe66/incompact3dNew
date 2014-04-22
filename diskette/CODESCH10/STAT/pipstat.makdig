@@ -1,0 +1,17 @@
+SWI= -c -p -g -O5
+pistat: pistnn.o pistts.o pistio.o pisttu.o  pistco.o ../../NCARFFT/ffts.o
+	f90  -p -g -o pistat pistnn.o pistts.o pistio.o  pisttu.o  pistco.o  ../../NCARFFT/ffts.o 
+pistts.o: pistts.f param.f
+	f90 $(SWI) pistts.f
+pistnn.o: pistnn.f param.f
+	f90 $(SWI) pistnn.f
+pistio.o: pistio.f param.f
+	f90 $(SWI) pistio.f
+pistco.o :pistco.f param.f
+	f90 $(SWI) pistco.f 
+pisttu.o :pisttu.f param.f
+	f90 $(SWI) pisttu.f 
+../../NCARFFT/ffts.o: ../../NCARFFT/ffts.f
+	f90 $(SWI) ../../NCARFFT/ffts.f 
+
+ 

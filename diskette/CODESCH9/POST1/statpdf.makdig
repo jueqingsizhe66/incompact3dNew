@@ -1,0 +1,6 @@
+SWI= -c -p -g -O5          
+stapdfbook: statpdfl.o 
+	f90 -p -g -o stapdfbook statpdfl.o 
+statpdfl.o: statpdfl.f 
+	f90 $(SWI) statpdfl.f
+ 

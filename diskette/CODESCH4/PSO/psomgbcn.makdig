@@ -1,0 +1,19 @@
+SWI= -c -p -g -O5
+psomgbcn: psomgbcma.o psomgbctn.o psomgbcbc.o psomgbcps.o psomgbcnn.o psomgbcin.o matfun.o ../../NCARFFT/ffts.o 
+	f90   -p -g -o psomgbcn psomgbcma.o psomgbctn.o psomgbcbc.o  psomgbcps.o psomgbcnn.o psomgbcin.o matfun.o ../../NCARFFT/ffts.o  
+psomgbcma.o: psomgbcma.f param.f
+	f90 $(SWI) psomgbcma.f
+psomgbctn.o: psomgbctn.f param.f
+	f90 $(SWI) psomgbctn.f
+psomgbcbc.o: psomgbcbc.f param.f
+	f90 $(SWI) psomgbcbc.f
+psomgbcnn.o: psomgbcnn.f param.f
+	f90 $(SWI) psomgbcnn.f
+psomgbcin.o: psomgbcin.f param.f
+	f90 $(SWI) psomgbcin.f
+psomgbcps.o: psomgbcps.f param.f
+	f90 $(SWI) psomgbcps.f
+matfun.o: matfun.f param.f
+	f90 $(SWI) matfun.f
+../../NCARFFT/ffts.o: ../../NCARFFT/ffts.f 
+	f90 $(SWIf) ../../NCARFFT/ffts.f

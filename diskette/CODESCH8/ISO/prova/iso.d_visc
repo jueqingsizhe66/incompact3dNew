@@ -1,0 +1,11 @@
+ 161 161 161 3 2. 2. 2.  n1  n2   n3  nsst  alx1  alx2   alx3
+ 1      1      0   nwrit   nread   iav
+ 3000. 1.0E-01  .05 1001     20  2    5 Re  vper  tfin  ntst   nprint  npin  npstf
+ 1001             nstop 
+ 1    1.5 .2  1.  50. 10.        icfl cflc ,tpin,tprin,tfin,twrfi
+ 7.26e-5          f0
+ 2            imic=1  for C.B. spectrum  imic=2 Mansour Wray
+   13. 3.    2.     akkpp,qq,sig
+0.5  .0  1.   1.  -1.   yc1mo,yc2mo,ramo,velmo,vsi  posit /pi
+0.  2.                 thet0    omtres
+0.  0.5               ar1,ar2   

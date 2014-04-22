@@ -1,0 +1,6 @@
+SWI= -c -p -g -O5                                      
+vispirot: vispirot.o 
+	f90 -p -g  -o vispirot vispirot.o 
+vispirot.o: vispirot.f param.f
+	f90 $(SWI) vispirot.f
+ 

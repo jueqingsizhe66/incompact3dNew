@@ -1,0 +1,10 @@
+SWI= -c -p -g -O5                 
+filterbook:  filterbook.o isoph.o ../../NCARFFT/ffts.o  
+	f90 -p -g -o filterbook filterbook.o isoph.o ../../NCARFFT/ffts.o  
+filterbook.o: filterbook.f param.f 
+	f90 $(SWI)  filterbook.f
+isoph.o: isoph.f param.f
+	f90 $(SWI)  isoph.f
+../../NCARFFT/ffts.o :../../NCARFFT/ffts.f                                      
+	f90 $(SWI)  ../../NCARFFT/ffts.f
+

@@ -1,0 +1,12 @@
+SWI= -c -p -g -O5                       
+chabudgbook: chabudgnn.o chabudgts.o chabudgio.o chabudgtu.o  
+	f90 -p -g -o chabudgbook chabudgnn.o chabudgts.o chabudgio.o  chabudgtu.o  
+chabudgts.o: chabudgts.f param.f
+	f90 $(SWI) chabudgts.f
+chabudgnn.o: chabudgnn.f param.f
+	f90 $(SWI) chabudgnn.f
+chabudgio.o: chabudgio.f param.f
+	f90 $(SWI) chabudgio.f
+chabudgtu.o :chabudgtu.f param.f
+	f90 $(SWI) chabudgtu.f 
+ 

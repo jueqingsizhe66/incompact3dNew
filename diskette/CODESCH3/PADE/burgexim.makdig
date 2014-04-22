@@ -1,0 +1,5 @@
+SWI= -c -p -g -O5
+burgexim: burgexim.o  
+	f90 -p -g -o burgexim burgexim.o  
+burgexim.o: burgexim.f param.f
+	f90 $(SWI) burgexim.f

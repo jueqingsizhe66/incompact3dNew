@@ -1,0 +1,16 @@
+SWI= -c -p -g -O5
+turb2dcu: turb2dma.o turb2dnn.o turb2dtn.o turb2din.o turb2dph.o  ../../NCARFFT/ffts.o 
+	f90 -o turb2dcu turb2dma.o turb2dnn.o turb2dtn.o turb2din.o turb2dph.o ../../NCARFFT/ffts.o 
+turb2dma.o: turb2dma.f
+	f90 $(SWI) turb2dma.f
+turb2dnn.o: turb2dnn.f
+	f90 $(SWI) turb2dnn.f
+turb2dtn.o: turb2dtn.f
+	f90 $(SWI) turb2dtn.f
+turb2din.o: turb2din.f
+	f90 $(SWI) turb2din.f
+turb2dph.o: turb2dph.f
+	f90 $(SWI) turb2dph.f
+../../NCARFFT/ffts.o: ../../NCARFFT/ffts.f                    
+	f90 $(SWI) ../../NCARFFT/ffts.f
+

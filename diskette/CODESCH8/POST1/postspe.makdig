@@ -1,0 +1,5 @@
+SWI= -c -p -g -O5                       
+postspe:  postspe.o 
+	f90 -p -g -o postspe postspe.o 
+postspe.o: postspe.f  param.f
+	f90 $(SWI)  postspe.f

@@ -1,0 +1,25 @@
+SWI= -c -p -g -O5                       
+chadses:  chadsma.o chadsnn.o chadshn.o chadstn.o chadstinv.o  chadsphnc.o chadsou.o chadsin.o chadstr.o chadsru.o  ../../NCARFFT/ffts.o
+	f90 -p -g -o chadses chadsma.o chadshn.o chadsnn.o chadstn.o chadstinv.o chadsphnc.o chadsou.o chadsin.o chadstr.o chadsru.o ../../NCARFFT/ffts.o
+chadsma.o: chadsma.f param.f 
+	f90 $(SWI)  chadsma.f
+chadsnn.o: chadsnn.f param.f   
+	f90 $(SWI)  chadsnn.f
+chadshn.o: chadshn.f param.f   
+	f90 $(SWI)  chadshn.f
+chadstn.o: chadstn.f param.f
+	f90 $(SWI)  chadstn.f
+chadstinv.o: chadstinv.f param.f
+	f90 $(SWI)  chadstinv.f
+chadsphnc.o: chadsphnc.f param.f
+	f90 $(SWI)  chadsphnc.f
+chadsou.o: chadsou.f param.f
+	f90 $(SWI)  chadsou.f
+chadsin.o: chadsin.f param.f
+	f90 $(SWI)  chadsin.f
+chadstr.o: chadstr.f param.f
+	f90 $(SWI)  chadstr.f
+chadsru.o: chadsru.f param.f
+	f90 $(SWI)  chadsru.f
+../../NCARFFT/ffts.o: ../../NCARFFT/ffts.f 
+	f90 $(SWI)  ../../NCARFFT/ffts.f

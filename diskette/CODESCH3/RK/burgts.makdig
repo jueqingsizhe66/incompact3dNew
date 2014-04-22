@@ -1,0 +1,5 @@
+SWI= -c -p -g -O5
+burgts: burgts.o  
+	f90  -p -g -o burgts burgts.o  
+burgts.o: burgts.f param.f
+	f90 $(SWI) burgts.f

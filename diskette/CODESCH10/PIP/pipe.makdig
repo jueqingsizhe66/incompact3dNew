@@ -1,0 +1,29 @@
+SWI= -c -p -g -O5 
+piprot:  pipco.o pipge.o piphn.o piptn.o pipphnc.o pipio.o pipintur.o pipindip.o piptr.o piptu.o pipma.o pipti.o ../../NCARFFT/ffts.o
+	f90  -p -g  -o piprot pipco.o pipge.o piphn.o piptn.o pipphnc.o pipio.o pipintur.o pipindip.o piptr.o piptu.o pipma.o pipti.o ../../NCARFFT/ffts.o
+pipco.o: pipco.f param.f   
+	f90 $(SWI)  pipco.f
+piphn.o: piphn.f param.f   
+	f90 $(SWI)  piphn.f
+pipti.o: pipti.f param.f
+	f90 $(SWI)  pipti.f
+piptn.o: piptn.f param.f
+	f90 $(SWI)  piptn.f
+pipphnc.o: pipphnc.f param.f
+	f90 $(SWI)  pipphnc.f
+pipio.o: pipio.f param.f
+	f90 $(SWI)  pipio.f
+pipintur.o: pipintur.f param.f
+	f90 $(SWI)  pipintur.f
+pipindip.o: pipindip.f param.f
+	f90 $(SWI)  pipindip.f
+piptr.o: piptr.f param.f
+	f90 $(SWI)  piptr.f
+piptu.o: piptu.f param.f
+	f90 $(SWI)  piptu.f
+pipma.o: pipma.f param.f
+	f90 $(SWI)  pipma.f
+pipge.o: pipge.f param.f
+	f90 $(SWI)  pipge.f
+../../NCARFFT/ffts.o: ../../NCARFFT/ffts.f 
+	f90 $(SWI)  ../../NCARFFT7ffts.f

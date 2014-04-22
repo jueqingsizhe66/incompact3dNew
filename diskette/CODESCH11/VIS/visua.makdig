@@ -1,0 +1,6 @@
+SWI= -c -p -g -O5
+visuanun: vistrinun.o 
+	f90 -p -g -o visuanun vistrinun.o 
+vistrinun.o: vistrinun.f param.f
+	f90 $(SWI) vistrinun.f
+ 

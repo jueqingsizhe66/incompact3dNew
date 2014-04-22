@@ -1,0 +1,16 @@
+SWI= -c -p -g -O5                       
+statiso:  staisoma.o staisonn.o staisosp.o staisopd.o staisoou.o ../../NCARFFT/ffts.o  
+	f90 -p -g -o statiso staisoma.o staisonn.o staisosp.o staisopd.o staisoou.o ../../NCARFFT/ffts.o 
+staisoma.o: staisoma.f param.f 
+	f90 $(SWI)  staisoma.f
+staisonn.o: staisonn.f param.f 
+	f90 $(SWI)  staisonn.f
+staisosp.o: staisosp.f param.f 
+	f90 $(SWI)  staisosp.f
+staisopd.o: staisopd.f param.f 
+	f90 $(SWI)  staisopd.f
+staisoou.o: staisoou.f param.f 
+	f90 $(SWI)  staisoou.f
+../../NCARFFT/ffts.o: ../../NCARFFT/ffts.f                    
+	f90 $(SWI)  ../../NCARFFT/ffts.f
+
