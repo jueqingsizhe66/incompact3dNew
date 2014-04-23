@@ -1,0 +1,41 @@
+SWI= -C -c -O3 -g   -qarch=pwr2 -qposition=append
+isoles:  isolesma.o isolesnn.o isolestn.o isoleshn.o isolesph.o  isolestr.o ../../NCARFFT/ffts.o isolesintu.o isolesio.o smago.o isolessp.o isolesst.o strfun.o isolesinsi.o isolesiosi.o isolestnsi.o dynamic.o dywolil.o smasig.o dywolmo.o
+	xlf -o isoles isolesma.o isolesnn.o isolestn.o isoleshn.o isolesph.o isolestr.o ../../NCARFFT/ffts.o isolesintu.o isolesio.o smago.o isolessp.o isolesst.o strfun.o isolesinsi.o isolesiosi.o isolestnsi.o dynamic.o dywolil.o smasig.o dywolmo.o
+isolesma.o: isolesma.f param.f 
+	xlf $(SWI)  isolesma.f
+isolesnn.o: isolesnn.f param.f   
+	xlf $(SWI)  isolesnn.f
+isolestn.o: isolestn.f param.f
+	xlf $(SWI)  isolestn.f
+isolestnsi.o: isolestnsi.f param.f
+	xlf $(SWI)  isolestnsi.f
+isoleshn.o: isoleshn.f param.f
+	xlf $(SWI)  isoleshn.f
+isolesph.o: isolesph.f param.f
+	xlf $(SWI)  isolesph.f
+isolesintu.o: isolesintu.f param.f
+	xlf $(SWI)  isolesintu.f
+isolesinsi.o: isolesinsi.f param.f
+	xlf $(SWI)  isolesinsi.f
+isolesio.o: isolesio.f param.f
+	xlf $(SWI)  isolesio.f
+isolesiosi.o: isolesiosi.f param.f
+	xlf $(SWI)  isolesiosi.f
+isolesst.o: isolesst.f param.f
+	xlf $(SWI)  isolesst.f
+isolestr.o: isolestr.f param.f
+	xlf $(SWI)  isolestr.f
+smago.o: smago.f param.f
+	xlf $(SWI)  smago.f
+smasig.o: smasig.f param.f
+	xlf $(SWI)  smasig.f
+strfun.o: strfun.f param.f
+	xlf $(SWI)  strfun.f
+dynamic.o: dynamic.f param.f
+	xlf $(SWI)  dynamic.f
+dywolil.o: dywolil.f param.f
+	xlf $(SWI)  dywolil.f
+dywolmo.o: dywolmo.f param.f
+	xlf $(SWI)  dywolmo.f
+isolessp.o: isolessp.f param.f
+	xlf $(SWI)  isolessp.f

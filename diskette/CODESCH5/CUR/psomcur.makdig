@@ -1,0 +1,20 @@
+SWI= -c -p -g -O5                       
+psomcur: psomcurco.o psomcurnn.o psomcurtn.o psomcurbc.o psomcurma.o psomcurmg.o psomcurit.o psomcurin.o
+	f90 -p -g  -o psomcur psomcurma.o psomcurnn.o psomcurtn.o psomcurbc.o psomcurco.o   psomcurmg.o  psomcurit.o psomcurin.o
+psomcurnn.o: psomcurnn.f param.f
+	f90 $(SWI) psomcurnn.f
+psomcurbc.o: psomcurbc.f param.f
+	f90 $(SWI) psomcurbc.f
+psomcurtn.o: psomcurtn.f param.f
+	f90 $(SWI) psomcurtn.f
+psomcurco.o :psomcurco.f param.f
+	f90 $(SWI) psomcurco.f 
+psomcurma.o :psomcurma.f param.f
+	f90 $(SWI) psomcurma.f 
+psomcurmg.o :psomcurmg.f param.f
+	f90 $(SWI) psomcurmg.f 
+psomcurit.o :psomcurit.f param.f
+	f90 $(SWI) psomcurit.f 
+psomcurin.o :psomcurin.f param.f
+	f90 $(SWI) psomcurin.f 
+ 

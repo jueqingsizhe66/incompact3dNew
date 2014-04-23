@@ -1,0 +1,27 @@
+SWI= -c -p -g -O5
+chalesnc:  chalesma.o chalesnn.o chaleshn.o chalestn.o chalesphnc.o chalesou.o chalesin.o chalestr.o chalesru.o chalessma.o chalesdyn.o  ../../NCARFFT/ffts.o
+	f90 -p -g  -o chalesnc chalesma.o chaleshn.o chalesnn.o chalestn.o chalesphnc.o chalesou.o chalesin.o chalestr.o chalesru.o chalessma.o chalesdyn.o ../../NCARFFT/ffts.o
+chalesma.o: chalesma.f param.f 
+	f90 $(SWI)  chalesma.f
+chalesnn.o: chalesnn.f param.f   
+	f90 $(SWI)  chalesnn.f
+chaleshn.o: chaleshn.f param.f   
+	f90 $(SWI)  chaleshn.f
+chalestn.o: chalestn.f param.f
+	f90 $(SWI)  chalestn.f
+chalesphnc.o: chalesphnc.f param.f
+	f90 $(SWI)  chalesphnc.f
+chalesou.o: chalesou.f param.f
+	f90 $(SWI)  chalesou.f
+chalesin.o: chalesin.f param.f
+	f90 $(SWI)  chalesin.f
+chalestr.o: chalestr.f param.f
+	f90 $(SWI)  chalestr.f
+chalesru.o: chalesru.f param.f
+	f90 $(SWI)  chalesru.f
+chalessma.o: chalessma.f param.f
+	f90 $(SWI)  chalessma.f
+chalesdyn.o: chalesdyn.f param.f
+	f90 $(SWI)  chalesdyn.f
+../../NCARFFT/ffts.o :../../NCARFFT/ffts.f
+	f90 $(SWI)  ../../NCARFFT/ffts.f

@@ -1,0 +1,8 @@
+SWI= -c -p -g -O5                       
+visiso:  visiso.o ../../NCARFFT/ffts.o
+	f90 -p -g -o visiso visiso.o ../../NCARFFT/ffts.o
+visiso.o: visiso.f  param.f
+	f90 $(SWI)  visiso.f
+../../NCARFFT/ffts.o: ../../NCARFFT/ffts.f                    
+	f90 $(SWI)  ../../NCARFFT/ffts.f
+

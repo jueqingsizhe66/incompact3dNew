@@ -1,0 +1,21 @@
+SWI= -c -p -g -O5             
+capro: capro.o pfishck.o psncs.o pcssn.o pftpe.o p2fft.o p2fftess.o ../../NCARFFT/fishpack.o ../../NCARFFT/ffts.o
+	f90 -p -g -o capro capro.o pfishck.o psncs.o pcssn.o pftpe.o p2fft.o p2fftess.o ../../NCARFFT/fishpack.o ../../NCARFFT/ffts.o 
+capro.o: capro.f param.f
+	f90 $(SWI) capro.f
+psncs.o: psncs.f param.f
+	f90 $(SWI) psncs.f
+pcssn.o: pcssn.f param.f
+	f90 $(SWI) pcssn.f
+p2fft.o: p2fft.f param.f
+	f90 $(SWI) p2fft.f
+pftpe.o: pftpe.f param.f
+	f90 $(SWI) pftpe.f
+pfishck.o: pfishck.f param.f
+	f90 $(SWI) pfishck.f
+p2fftess.o: p2fftess.f param.f
+	f90 $(SWI) p2fftess.f
+../../NCARFFT/fishpack.o: ../../NCARFFT/fishpack.f param.f
+	f90 $(SWI) ../../NCARFFT/fishpack.f
+../../NCARFFT/ffts.o: ../../NCARFFT/ffts.f param.f
+	f90 $(SWI) ../../NCARFFT/ffts.f

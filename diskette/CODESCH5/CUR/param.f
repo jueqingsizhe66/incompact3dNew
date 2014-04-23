@@ -1,0 +1,10 @@
+c     parameter (m1=129,m2=129,ndd=2)
+      parameter (m1=193,m2=193,ndd=2)
+      parameter (md1=193)
+      parameter (m1m=m1-1,m2m=m2-1)
+      parameter (mdm=m1*m2,m1l1=m1m/2+1,m2l1=m2m/2+1,mdm1=m1l1*m2l1)
+      parameter (m1l2=m1m/4+1,m2l2=m2m/4+1,mdm2=m1l2*m2l2)
+      parameter (m1l3=m1m/8+1,m2l3=m2m/8+1,mdm3=m1l3*m2l3)
+      parameter (m1l4=m1m/16+1,m2l4=m2m/16+1,mdm4=m1l4*m2l4)
+      parameter (nlev=5,nij=mdm+mdm1+mdm2+mdm3+mdm4)
+

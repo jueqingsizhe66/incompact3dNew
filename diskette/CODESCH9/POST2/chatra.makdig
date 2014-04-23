@@ -1,0 +1,16 @@
+SWI= -c -p -g -O5
+chatra: chatrann.o chatrats.o chatraio.o chatratu.o  chatrasp.o ../../NCARFFT/ffts.o
+	f90 -p -g -o chatra chatrann.o chatrats.o chatraio.o  chatratu.o  chatrasp.o  ../../NCARFFT/ffts.o
+chatrats.o: chatrats.f param.f
+	f90 $(SWI) chatrats.f
+chatrann.o: chatrann.f param.f
+	f90 $(SWI) chatrann.f
+chatraio.o: chatraio.f param.f
+	f90 $(SWI) chatraio.f
+chatrasp.o :chatrasp.f param.f
+	f90 $(SWI) chatrasp.f 
+chatratu.o :chatratu.f param.f
+	f90 $(SWI) chatratu.f 
+../../NCARFFT/ffts.o :../../NCARFFT/ffts.f 
+	f90 $(SWI) ../../NCARFFT/ffts.f 
+ 

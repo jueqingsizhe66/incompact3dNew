@@ -1,0 +1,21 @@
+SWI= -c -O3    
+capro: capro.o pfishck.o psncs.o pcssn.o pftpe.o p2fft.o p2fftess.o ../../NCARFFT/fishpack.o ../../NCARFFT/ffts.o
+	gfortran -o capro capro.o pfishck.o psncs.o pcssn.o pftpe.o p2fft.o p2fftess.o ../../NCARFFT/sfishpack.o ../../NCARFFT/ffts.o -l esslp2
+capro.o: capro.f param.f
+	gfortran $(SWI) capro.f
+psncs.o: psncs.f param.f
+	gfortran $(SWI) psncs.f
+pcssn.o: pcssn.f param.f
+	gfortran $(SWI) pcssn.f
+p2fft.o: p2fft.f param.f
+	gfortran $(SWI) p2fft.f
+pftpe.o: pftpe.f param.f
+	gfortran $(SWI) pftpe.f
+pfishck.o: pfishck.f param.f
+	gfortran $(SWI) pfishck.f
+p2fftess.o: p2fftess.f param.f
+	gfortran $(SWI) p2fftess.f
+../../NCARFFT/fishpack.o: ../../NCARFFT/fishpack.f param.f
+	gfortran $(SWI) ../../NCARFFT/fishpack.f
+../../NCARFFT/ffts.o: ../../NCARFFT/ffts.f param.f
+	gfortran $(SWI) ../../NCARFFT/ffts.f

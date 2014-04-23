@@ -1,0 +1,44 @@
+SWI= -c -p -g -O5                        
+isoles:  isolesma.o isolesnn.o isolestn.o isoleshn.o isolesph.o  isolestr.o ../../NCARFFT/ffts.o isolesintu.o isolesio.o smago.o isolessp.o isolesst.o strfun.o isolesinsi.o isolesiosi.o isolestnsi.o dynamic.o dywolil.o smasig.o dywolmo.o
+	f90 -o isoles isolesma.o isolesnn.o isolestn.o isoleshn.o isolesph.o isolestr.o ../../NCARFFT/ffts.o isolesintu.o isolesio.o smago.o isolessp.o isolesst.o strfun.o isolesinsi.o isolesiosi.o isolestnsi.o dynamic.o dywolil.o smasig.o dywolmo.o
+isolesma.o: isolesma.f param.f 
+	f90 $(SWI)  isolesma.f
+isolesnn.o: isolesnn.f param.f   
+	f90 $(SWI)  isolesnn.f
+isolestn.o: isolestn.f param.f
+	f90 $(SWI)  isolestn.f
+isolestnsi.o: isolestnsi.f param.f
+	f90 $(SWI)  isolestnsi.f
+isoleshn.o: isoleshn.f param.f
+	f90 $(SWI)  isoleshn.f
+isolesph.o: isolesph.f param.f
+	f90 $(SWI)  isolesph.f
+isolesintu.o: isolesintu.f param.f
+	f90 $(SWI)  isolesintu.f
+isolesinsi.o: isolesinsi.f param.f
+	f90 $(SWI)  isolesinsi.f
+isolesio.o: isolesio.f param.f
+	f90 $(SWI)  isolesio.f
+isolesiosi.o: isolesiosi.f param.f
+	f90 $(SWI)  isolesiosi.f
+isolesst.o: isolesst.f param.f
+	f90 $(SWI)  isolesst.f
+isolestr.o: isolestr.f param.f
+	f90 $(SWI)  isolestr.f
+smago.o: smago.f param.f
+	f90 $(SWI)  smago.f
+smasig.o: smasig.f param.f
+	f90 $(SWI)  smasig.f
+strfun.o: strfun.f param.f
+	f90 $(SWI)  strfun.f
+dynamic.o: dynamic.f param.f
+	f90 $(SWI)  dynamic.f
+dywolil.o: dywolil.f param.f
+	f90 $(SWI)  dywolil.f
+dywolmo.o: dywolmo.f param.f
+	f90 $(SWI)  dywolmo.f
+isolessp.o: isolessp.f param.f
+	f90 $(SWI)  isolessp.f
+../../NCARFFT/ffts.o :../../NCARFFT/ffts.f                                      
+	f90 $(SWI)  ../../NCARFFT/ffts.f
+
