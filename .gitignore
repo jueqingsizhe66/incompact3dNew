@@ -2,6 +2,7 @@
 *.o     # ignore all the *.o files
 *.out   # ignore all the *.out files
 *.tar.gz  #  ignore all the 
+!incompact3da.tar.gz
 !lib.mod  #  But don't ignore the file lib.mod
 *.swp
 airfoil/
